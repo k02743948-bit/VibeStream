@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>VibeStream — Broadcast & Sync Your Daily Frequency</title>
+  <meta name="description" content="Viral social vibe card generator, ambient audio frequency visualizer, and global community feed.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-2824344976861775~8812250633" crossorigin="anonymous"></script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Outfit', 'sans-serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              cyan: '#06b6d4',
+              magenta: '#d946ef',
+              purple: '#a855f7',
+              dark: '#07070d',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #07070d;
+      color: #f1f5f9;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4, .font-display {
+      font-family: 'Outfit', sans-serif;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    
+    /* Neon Glow & Glassmorphism styles */
+    .glass-panel {
+      background: rgba(18, 18, 32, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .neon-glow-cyan {
+      box-shadow: 0 0 25px -4px rgba(6, 182, 212, 0.4);
+    }
+    .neon-glow-magenta {
+      box-shadow: 0 0 25px -4px rgba(217, 70, 239, 0.4);
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090913;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #27273f;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #4a4a75;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#07070d] text-slate-100 flex flex-col selection:bg-fuchsia-500 selection:text-white pb-20 md:pb-10">
+
+  <!-- Background Ambient Glow -->
+  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    <div class="absolute -top-40 -left-40 h-96 w-96 rounded-full bg-cyan-600/10 blur-[130px]"></div>
+    <div class="absolute top-1/3 -right-40 h-[480px] w-[480px] rounded-full bg-fuchsia-600/10 blur-[150px]"></div>
+    <div class="absolute -bottom-40 left-1/3 h-96 w-96 rounded-full bg-purple-600/10 blur-[140px]"></div>
+  </div>
+
+  <!-- TOP BAR -->
+  <header class="sticky top-0 z-40 bg-[#07070d]/85 backdrop-blur-xl border-b border-white/10">
+    <div class="max-w-6xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between gap-8">
+      <!-- Zone 1: Brand Wordmark -->
+      <button onclick="switchTab('feed')" class="flex items-center gap-2.5 text-left group">
+        <div class="h-8 w-8 rounded-lg bg-gradient-to-tr from-cyan-400 via-fuchsia-500 to-purple-600 p-0.5 shadow-md shadow-fuchsia-500/30 flex items-center justify-center">
+          <i data-lucide="radio" class="h-4 w-4 text-white"></i>
+        </div>
+        <span class="text-xl font-black tracking-tight font-display text-white group-hover:text-cyan-300 transition-colors whitespace-nowrap">
+          VibeStream
+        </span>
+      </button>
+         
+<ins class="adsbygoogle"
+     style="display:inline-block;width:320px;height:50px"
+     data-ad-client="ca-app-pub-2824344976861775"
+     data-ad-slot="3614165984"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+      <!-- Zone 2: Navigation Links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+        <button id="nav-btn-create" onclick="switchTab('create')" class="transition-colors hover:text-white text-cyan-300 font-semibold whitespace-nowrap">
+          Create Vibe
+        </button>
+        <button id="nav-btn-feed" onclick="switchTab('feed')" class="transition-colors hover:text-white whitespace-nowrap">
+          Global Feed
+        </button>
+        <button id="nav-btn-profile" onclick="switchTab('profile')" class="transition-colors hover:text-white whitespace-nowrap">
+          My Profile
+        </button>
+      </nav>
+
+      <!-- Zone 3: Primary Action CTA -->
+      <div class="flex items-center gap-3 shrink-0">
+        <button onclick="switchTab('create')" class="px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-cyan-500 via-fuchsia-500 to-purple-600 rounded-xl hover:shadow-lg hover:shadow-fuchsia-500/25 active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer">
+          + Drop a Vibe
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN VIEWPORT -->
+  <main class="relative z-10 flex-1 max-w-6xl w-full mx-auto px-4 md:px-6 py-6 md:py-8">
+
+    <!-- ================= TAB 1: CREATE YOUR VIBE ================= -->
+    <section id="tab-create" class="space-y-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/10 pb-5">
+        <div>
+          <span class="text-xs uppercase font-mono tracking-widest text-cyan-400 font-semibold">Frequency Studio</span>
+          <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mt-1">Broadcast Your Vibe</h1>
+          <p class="text-sm md:text-base text-slate-400 mt-1 max-w-xl">
+            Type your raw mental frequency, tune your audio vibe, and generate a viral, shareable Vibe Card.
+          </p>
+        </div>
+        <button onclick="shufflePrompt()" class="self-start md:self-auto flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 transition-colors">
+          <i data-lucide="shuffle" class="h-3.5 w-3.5 text-fuchsia-400"></i>
+          <span>Inspiration Randomizer</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Form Controls -->
+        <form onsubmit="handlePublishVibe(event)" class="lg:col-span-7 space-y-6">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <label for="create-text" class="text-sm font-semibold text-slate-200">What are you feeling right now?</label>
+              <span id="char-counter" class="text-xs font-mono text-slate-500">64/180</span>
+            </div>
+            <textarea
+              id="create-text"
+              rows="3"
+              maxlength="180"
+              oninput="updatePreview()"
+              class="w-full rounded-2xl bg-slate-900/80 border border-white/10 p-4 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm md:text-base resize-none"
+              placeholder="e.g. Late-night coding sprint, chilling with chai, crushing a gym PR..."
+            >Late-night coding sprint fueled by black coffee and lofi beats</textarea>
+          </div>
+
+          <!-- Quick Sparks -->
+          <div class="space-y-2">
+            <span class="text-xs font-mono text-slate-400">Quick Sparks:</span>
+            <div class="flex flex-wrap gap-2">
+              <button type="button" onclick="setPromptText('Late-night coding sprint with atmospheric synth drone', 'Focus')" class="text-xs px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-white">Late-night coding</button>
+              <button type="button" onclick="setPromptText('Chilling on the balcony with steaming cardamom chai as rain falls', 'Chill')" class="text-xs px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-white">Chilling with chai</button>
+              <button type="button" onclick="setPromptText('Crushed a heavy squat PR to synthwave, zero excuses', 'Hype')" class="text-xs px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-white">Grinding in gym</button>
+              <button type="button" onclick="setPromptText('Secret rooftop set overlooking the neon skyline with heavy bass', 'Party')" class="text-xs px-2.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-white">Rooftop rave</button>
+            </div>
+          </div>
+
+          <!-- Mood Tag Selector -->
+          <div class="space-y-3">
+            <label class="text-sm font-semibold text-slate-200 flex items-center justify-between">
+              <span>Select Mood Tag</span>
+              <span id="mood-freq-display" class="text-xs text-cyan-400 font-mono">432 Hz Alpha Waves</span>
+            </label>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2" id="mood-buttons-container">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Energy Slider -->
+          <div class="space-y-2 p-4 rounded-xl bg-slate-900/50 border border-white/10">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-semibold text-slate-300 flex items-center gap-1.5">
+                <i data-lucide="sliders" class="h-3.5 w-3.5 text-cyan-400"></i>
+                Vibe Energy Pulse
+              </span>
+              <span id="energy-val-display" class="font-mono font-bold text-cyan-400">85%</span>
+            </div>
+            <input
+              type="range"
+              id="create-energy"
+              min="10"
+              max="100"
+              value="85"
+              oninput="handleEnergyChange(this.value)"
+              class="w-full accent-cyan-400 cursor-pointer h-2 bg-slate-800 rounded-lg"
+            >
+            <div class="flex justify-between text-[11px] text-slate-500 font-mono">
+              <span>Deep Zen (10%)</span>
+              <span>Medium Pulse (50%)</span>
+              <span>Overclocked (100%)</span>
+            </div>
+          </div>
+
+          <!-- Theme Picker -->
+          <div class="space-y-2">
+            <label class="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+              <i data-lucide="palette" class="h-3.5 w-3.5 text-purple-400"></i>
+              Card Gradient Theme
+            </label>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2" id="theme-buttons-container">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full h-13 rounded-2xl bg-gradient-to-r from-cyan-500 via-fuchsia-500 to-purple-600 text-white font-bold text-base flex items-center justify-center gap-2 shadow-lg shadow-fuchsia-500/25 hover:shadow-fuchsia-500/40 active:scale-[0.99] transition-all cursor-pointer py-3.5"
+          >
+            <i data-lucide="send" class="h-4 w-4"></i>
+            <span>Generate & Broadcast Vibe Card</span>
+          </button>
+        </form>
+
+        <!-- Live Instant Card Preview -->
+        <div class="lg:col-span-5 space-y-3 sticky top-24">
+          <div class="flex items-center justify-between text-xs text-slate-400 px-1">
+            <span class="font-mono uppercase tracking-wider font-semibold text-cyan-400 flex items-center gap-1.5">
+              <span class="h-2 w-2 rounded-full bg-cyan-400 animate-pulse"></span>
+              Live Card Preview
+            </span>
+            <span>Updates in real time</span>
+          </div>
+
+          <!-- The Live Preview Card -->
+          <div id="live-preview-card-slot"></div>
+
+          <div class="p-4 rounded-xl bg-slate-900/40 border border-white/5 text-xs text-slate-400 space-y-2">
+            <div class="flex items-center justify-between">
+              <p class="font-semibold text-slate-300">💡 Instant Share & Picture:</p>
+              <a href="/vibestream_card_showcase.jpg" target="_blank" class="text-[11px] text-cyan-400 hover:text-cyan-300 underline flex items-center gap-1">
+                View Full HD Picture ↗
+              </a>
+            </div>
+            <p>Tap "Export" on any card to instantly render and download a high-res 1080×1350 PNG image to your device!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 2: GLOBAL VIBES FEED ================= -->
+    <section id="tab-feed" class="space-y-6 hidden">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/10 pb-5">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs uppercase font-mono tracking-widest text-fuchsia-400 font-semibold flex items-center gap-1.5">
+              <i data-lucide="globe-2" class="h-3.5 w-3.5"></i>
+              Worldwide Telemetry
+            </span>
+            <span class="text-slate-600">·</span>
+            <span id="feed-count-tag" class="text-xs font-mono text-slate-400">7 Active Waves</span>
+          </div>
+          <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mt-1">Global Vibes Feed</h1>
+          <p class="text-sm md:text-base text-slate-400 mt-1 max-w-xl">
+            Live mental states and ambient frequencies streaming from creators around the globe.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2 self-start md:self-auto">
+          <button onclick="toggleLiveStream()" id="live-stream-btn" class="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium border bg-emerald-500/15 border-emerald-500/40 text-emerald-300">
+            <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="live-stream-status-text">Live Sync: Active</span>
+          </button>
+          <button onclick="injectSimulatedVibe()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 transition-colors">
+            <i data-lucide="refresh-cw" class="h-3.5 w-3.5 text-cyan-400"></i>
+            <span class="hidden sm:inline">Tune In</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Controls: Search & Filters -->
+      <div class="space-y-4">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <div class="relative flex-1 max-w-md">
+            <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none"></i>
+            <input
+              type="text"
+              id="feed-search-input"
+              oninput="renderFeed()"
+              placeholder="Search vibe, city, mood, creator..."
+              class="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-900/80 border border-white/10 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"
+            >
+          </div>
+
+          <!-- Sort -->
+          <div class="flex items-center gap-1 p-1 bg-slate-900/80 border border-white/10 rounded-xl shrink-0 self-start sm:self-auto">
+            <button onclick="setSortMode('trending')" id="sort-trending" class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-fuchsia-600 text-white">
+              <i data-lucide="flame" class="h-3 w-3"></i>
+              <span>Trending</span>
+            </button>
+            <button onclick="setSortMode('latest')" id="sort-latest" class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors text-slate-400 hover:text-white">
+              <i data-lucide="clock" class="h-3 w-3"></i>
+              <span>Latest</span>
+            </button>
+            <button onclick="setSortMode('energy')" id="sort-energy" class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors text-slate-400 hover:text-white">
+              <i data-lucide="zap" class="h-3 w-3"></i>
+              <span>Peak Energy</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mood Filters -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-2" id="feed-mood-filter-strip">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- Feed Grid -->
+      <div id="feed-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+    </section>
+
+    <!-- ================= TAB 3: MY PROFILE ================= -->
+    <section id="tab-profile" class="space-y-8 hidden">
+      <!-- Profile Header -->
+      <div class="relative rounded-3xl bg-gradient-to-br from-slate-900/90 via-[#0e0e22] to-slate-900/90 border border-white/10 p-6 md:p-8 overflow-hidden">
+        <div class="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-fuchsia-600/20 blur-3xl"></div>
+        <div class="pointer-events-none absolute -left-16 -bottom-16 h-56 w-56 rounded-full bg-cyan-600/20 blur-3xl"></div>
+
+        <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div class="flex items-center gap-4">
+            <div class="relative h-20 w-20 rounded-2xl bg-gradient-to-tr from-cyan-500 to-fuchsia-500 p-0.5 shadow-xl shadow-fuchsia-500/20">
+              <img id="user-avatar-img" src="https://api.dicebear.com/7.x/bottts/svg?seed=alexrivera" alt="User Avatar" class="h-full w-full rounded-2xl object-cover bg-slate-950">
+              <span class="absolute -bottom-1 -right-1 h-5 w-5 rounded-full bg-emerald-500 border-2 border-slate-950 flex items-center justify-center text-[10px] text-white">⚡</span>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h1 id="user-name-display" class="text-2xl md:text-3xl font-extrabold text-white tracking-tight font-display">Alex Rivera</h1>
+                <button onclick="toggleEditProfile()" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors">
+                  <i data-lucide="edit-3" class="h-4 w-4"></i>
+                </button>
+              </div>
+              <div class="flex items-center gap-2 text-xs text-slate-400 mt-1">
+                <span id="user-handle-display">@alex_frequency</span>
+                <span class="text-slate-600">·</span>
+                <span class="flex items-center gap-1 text-slate-300">
+                  <i data-lucide="map-pin" class="h-3.5 w-3.5 text-cyan-400"></i>
+                  <span id="user-location-display">San Francisco, CA</span>
+                </span>
+                <span class="text-slate-600">·</span>
+                <span class="text-emerald-400 font-mono">Broadcasting</span>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="switchTab('create')" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-fuchsia-500 text-white font-semibold text-xs shadow-lg shadow-fuchsia-500/25 hover:shadow-fuchsia-500/40 transition-all cursor-pointer">
+            <i data-lucide="plus" class="h-4 w-4"></i>
+            <span>Drop New Vibe</span>
+          </button>
+        </div>
+
+        <!-- Edit Profile Drawer -->
+        <div id="profile-edit-drawer" class="relative z-10 mt-6 pt-6 border-t border-white/10 hidden">
+          <form onsubmit="saveProfileChanges(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="text-xs text-slate-400 block mb-1">Display Name</label>
+              <input type="text" id="edit-name-input" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-white/15 text-white text-xs focus:outline-none focus:border-cyan-400">
+            </div>
+            <div>
+              <label class="text-xs text-slate-400 block mb-1">Handle</label>
+              <input type="text" id="edit-handle-input" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-white/15 text-white text-xs focus:outline-none focus:border-cyan-400">
+            </div>
+            <div>
+              <label class="text-xs text-slate-400 block mb-1">City / Location</label>
+              <div class="flex gap-2">
+                <input type="text" id="edit-location-input" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-white/15 text-white text-xs focus:outline-none focus:border-cyan-400">
+                <button type="submit" class="px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-bold text-xs hover:bg-cyan-400 transition-colors">Save</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-6 border-t border-white/10">
+          <div class="p-3.5 rounded-2xl bg-white/5 border border-white/5 text-center">
+            <span class="text-[11px] uppercase tracking-wider text-slate-400 font-mono block">Vibes Dropped</span>
+            <span id="stat-created-count" class="text-2xl font-extrabold font-mono text-white mt-1 block">1</span>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-white/5 border border-white/5 text-center">
+            <span class="text-[11px] uppercase tracking-wider text-slate-400 font-mono block">Total Likes</span>
+            <span id="stat-likes-count" class="text-2xl font-extrabold font-mono text-rose-400 mt-1 block">24</span>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-white/5 border border-white/5 text-center">
+            <span class="text-[11px] uppercase tracking-wider text-slate-400 font-mono block">Matches Synced</span>
+            <span id="stat-matches-count" class="text-2xl font-extrabold font-mono text-purple-400 mt-1 block">11</span>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-white/5 border border-white/5 text-center">
+            <span class="text-[11px] uppercase tracking-wider text-slate-400 font-mono block">Frequency Score</span>
+            <span id="stat-freq-score" class="text-2xl font-extrabold font-mono text-cyan-400 mt-1 block">185</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Created vs Saved Switcher -->
+      <div class="space-y-6">
+        <div class="flex items-center justify-between border-b border-white/10 pb-3">
+          <div class="flex items-center gap-1 p-1 bg-slate-900 border border-white/10 rounded-xl">
+            <button onclick="setProfileTab('created')" id="tab-btn-created" class="px-4 py-1.5 text-xs font-semibold rounded-lg transition-colors bg-fuchsia-600 text-white">
+              My Created Vibes (<span id="profile-created-badge">0</span>)
+            </button>
+            <button onclick="setProfileTab('saved')" id="tab-btn-saved" class="px-4 py-1.5 text-xs font-semibold rounded-lg transition-colors text-slate-400 hover:text-white">
+              Saved Archive (<span id="profile-saved-badge">0</span>)
+            </button>
+          </div>
+          <span class="text-xs font-mono text-slate-500 hidden sm:inline">Persisted locally in localStorage</span>
+        </div>
+
+        <div id="profile-cards-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= MATCH VIBE MODAL ================= -->
+  <div id="match-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
+    <div class="relative w-full max-w-lg rounded-3xl bg-[#0c0d1b] border border-white/15 p-6 md:p-8 shadow-2xl text-slate-100 overflow-hidden">
+      <button onclick="closeMatchModal()" class="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 transition-colors">
+        <i data-lucide="x" class="h-5 w-5"></i>
+      </button>
+
+      <div class="text-center space-y-1 mb-6">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs font-mono mb-2">
+          <i data-lucide="zap" class="h-3.5 w-3.5 text-purple-400"></i>
+          Frequency Synchronization
+        </div>
+        <h2 class="text-2xl font-bold font-display text-white">Vibe Resonance Match</h2>
+        <p id="match-modal-subtitle" class="text-xs md:text-sm text-slate-400">Harmonic connection with creator</p>
+      </div>
+
+      <div class="p-5 rounded-2xl bg-white/5 border border-white/10 mb-6 flex flex-col items-center justify-center relative overflow-hidden">
+        <div id="match-modal-score" class="text-5xl font-extrabold font-display tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-amber-300">
+          94%
+        </div>
+        <span class="text-xs font-mono uppercase tracking-wider text-slate-400 mt-1">Harmonic Phase Alignment</span>
+
+        <div class="flex items-center gap-6 mt-4 w-full justify-around pt-3 border-t border-white/5 text-xs">
+          <div class="text-center">
+            <span class="text-slate-400 block text-[11px]">Their Mood</span>
+            <span id="match-modal-mood" class="font-semibold text-white">Focus</span>
+          </div>
+          <div class="text-center">
+            <span class="text-slate-400 block text-[11px]">Frequency</span>
+            <span id="match-modal-freq" class="font-mono font-semibold text-cyan-300">432 Hz</span>
+          </div>
+          <div class="text-center">
+            <span class="text-slate-400 block text-[11px]">Compatibility</span>
+            <span class="font-mono font-semibold text-emerald-300">Ultra High</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-xl bg-slate-900/60 border border-white/10 mb-5">
+        <p id="match-modal-quote" class="text-sm italic text-slate-300 leading-snug"></p>
+      </div>
+
+      <div id="match-action-area" class="space-y-4">
+        <input
+          type="text"
+          id="match-wave-message"
+          placeholder="Send a wave message (e.g. Totally feeling this vibe right now!)..."
+          class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-purple-400"
+        >
+        <div class="flex items-center gap-3">
+          <button onclick="closeMatchModal()" class="flex-1 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-white font-medium text-sm transition-colors">
+            Close
+          </button>
+          <button onclick="sendWaveAction()" class="flex-2 py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/35 active:scale-[0.98] transition-all cursor-pointer">
+            <i data-lucide="sparkles" class="h-4 w-4"></i>
+            <span>Send Frequency Wave 👋</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING TOAST -->
+  <aside id="toast-container" class="fixed bottom-20 md:bottom-6 right-4 md:right-6 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></aside>
+
+  <!-- MOBILE BOTTOM BAR -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#090914]/95 backdrop-blur-xl border-t border-white/10 px-4 py-2">
+    <div class="grid grid-cols-3 items-center max-w-md mx-auto">
+      <button onclick="switchTab('create')" id="mob-nav-create" class="flex flex-col items-center justify-center py-1.5 text-cyan-400 font-bold">
+        <i data-lucide="plus" class="h-5 w-5"></i>
+        <span class="text-[10px] tracking-tight mt-1">Create</span>
+      </button>
+      <button onclick="switchTab('feed')" id="mob-nav-feed" class="flex flex-col items-center justify-center py-1.5 text-slate-400">
+        <i data-lucide="globe-2" class="h-5 w-5"></i>
+        <span class="text-[10px] tracking-tight mt-1">Global Feed</span>
+      </button>
+      <button onclick="switchTab('profile')" id="mob-nav-profile" class="flex flex-col items-center justify-center py-1.5 text-slate-400 relative">
+        <i data-lucide="user" class="h-5 w-5"></i>
+        <span class="text-[10px] tracking-tight mt-1">Profile</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ================= JAVASCRIPT APP ENGINE ================= -->
+  <script>
+    // 1. DATA CONSTANTS & CONFIGURATION
+    const MOOD_CONFIG = {
+      Focus: {
+        label: 'Focus',
+        color: '#06b6d4',
+        baseFrequency: 432,
+        desc: 'Deep terminal flow state & coding sprints',
+        defaultTheme: 'cyber-neon',
+        subVibe: 'Deep Terminal Flow',
+        icon: 'zap'
+      },
+      Chill: {
+        label: 'Chill',
+        color: '#34d399',
+        baseFrequency: 528,
+        desc: 'Steaming chai & gentle rain on window glass',
+        defaultTheme: 'midnight-aurora',
+        subVibe: 'Chai & Rain',
+        icon: 'coffee'
+      },
+      Hype: {
+        label: 'Hype',
+        color: '#f97316',
+        baseFrequency: 639,
+        desc: 'PR in the gym, launch day adrenaline',
+        defaultTheme: 'electric-sunset',
+        subVibe: 'Gym PR Beast',
+        icon: 'flame'
+      },
+      Party: {
+        label: 'Party',
+        color: '#ec4899',
+        baseFrequency: 741,
+        desc: 'Heavy bassline & underground warehouse rave',
+        defaultTheme: 'tokyo-drift',
+        subVibe: 'Neon Skyline Club',
+        icon: 'sparkles'
+      },
+      Melancholy: {
+        label: 'Melancholy',
+        color: '#a855f7',
+        baseFrequency: 396,
+        desc: '2AM wistful longing & rain reflections',
+        defaultTheme: 'cosmic-void',
+        subVibe: '2AM Empty Streets',
+        icon: 'moon'
+      }
+    };
+
+    const CARD_THEMES = {
+      'cyber-neon': {
+        id: 'cyber-neon',
+        name: 'Cyber Neon',
+        gradient: 'from-[#0b0c1e] via-[#120a2e] to-[#041d2d]',
+        accent: '#06b6d4',
+        secondary: '#a855f7',
+        glow: 'rgba(6, 182, 212, 0.4)'
+      },
+      'midnight-aurora': {
+        id: 'midnight-aurora',
+        name: 'Midnight Aurora',
+        gradient: 'from-[#06141a] via-[#091b26] to-[#120a26]',
+        accent: '#10b981',
+        secondary: '#8b5cf6',
+        glow: 'rgba(16, 185, 129, 0.35)'
+      },
+      'electric-sunset': {
+        id: 'electric-sunset',
+        name: 'Electric Sunset',
+        gradient: 'from-[#1a0818] via-[#240a1b] to-[#1c0f05]',
+        accent: '#ec4899',
+        secondary: '#f59e0b',
+        glow: 'rgba(236, 72, 153, 0.4)'
+      },
+      'tokyo-drift': {
+        id: 'tokyo-drift',
+        name: 'Tokyo Drift',
+        gradient: 'from-[#0d0922] via-[#1a0f35] to-[#08152e]',
+        accent: '#d946ef',
+        secondary: '#3b82f6',
+        glow: 'rgba(217, 70, 239, 0.4)'
+      },
+      'cosmic-void': {
+        id: 'cosmic-void',
+        name: 'Cosmic Void',
+        gradient: 'from-[#070710] via-[#0f0c22] to-[#14122e]',
+        accent: '#c084fc',
+        secondary: '#38bdf8',
+        glow: 'rgba(192, 132, 252, 0.35)'
+      }
+    };
+
+    const INITIAL_VIBES = [
+      {
+        id: 'vibe-1',
+        text: 'Late-night refactoring session with binaural synth drone. Everything finally clicks into place.',
+        mood: 'Focus',
+        subVibe: 'Deep Terminal Flow',
+        theme: 'cyber-neon',
+        energy: 88,
+        author: {
+          name: 'Kenji Sato',
+          handle: 'kenji_codes',
+          avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=kenji',
+          location: 'Tokyo, Japan'
+        },
+        likes: 342,
+        isLiked: false,
+        matchedCount: 89,
+        createdAt: Date.now() - 1000 * 60 * 8,
+        timestampStr: '8m ago',
+        frequencyHz: 432
+      },
+      {
+        id: 'vibe-2',
+        text: 'Sipping hot cardamom chai on the balcony while distant thunder rolls over the skyline.',
+        mood: 'Chill',
+        subVibe: 'Chai & Rain',
+        theme: 'midnight-aurora',
+        energy: 35,
+        author: {
+          name: 'Aanya Sharma',
+          handle: 'aanya_vibes',
+          avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=aanya',
+          location: 'Mumbai, India'
+        },
+        likes: 519,
+        isLiked: true,
+        matchedCount: 142,
+        createdAt: Date.now() - 1000 * 60 * 24,
+        timestampStr: '24m ago',
+        frequencyHz: 528
+      },
+      {
+        id: 'vibe-3',
+        text: 'Crushed a 180kg deadlift PR. Heart pounding to synthwave, zero excuses today.',
+        mood: 'Hype',
+        subVibe: 'Gym PR Beast',
+        theme: 'electric-sunset',
+        energy: 96,
+        author: {
+          name: 'Marcus Vance',
+          handle: 'marcus_lift',
+          avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=marcus',
+          location: 'Austin, TX'
+        },
+        likes: 820,
+        isLiked: false,
+        matchedCount: 204,
+        createdAt: Date.now() - 1000 * 60 * 45,
+        timestampStr: '45m ago',
+        frequencyHz: 639
+      },
+      {
+        id: 'vibe-4',
+        text: 'Secret rooftop set overlooking Kreuzberg. The analogue bass vibration is shaking my chest.',
+        mood: 'Party',
+        subVibe: 'Underground Warehouse',
+        theme: 'tokyo-drift',
+        energy: 92,
+        author: {
+          name: 'Elena Rostova',
+          handle: 'elena_sound',
+          avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=elena',
+          location: 'Berlin, Germany'
+        },
+        likes: 673,
+        isLiked: false,
+        matchedCount: 167,
+        createdAt: Date.now() - 1000 * 60 * 82,
+        timestampStr: '1h ago',
+        frequencyHz: 741
+      },
+      {
+        id: 'vibe-5',
+        text: 'Watching city streetlights blur through the wet bus window on the long commute home.',
+        mood: 'Melancholy',
+        subVibe: '2AM Empty Streets',
+        theme: 'cosmic-void',
+        energy: 28,
+        author: {
+          name: 'Min-Jun Park',
+          handle: 'minjun_night',
+          avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=minjun',
+          location: 'Seoul, South Korea'
+        },
+        likes: 412,
+        isLiked: false,
+        matchedCount: 95,
+        createdAt: Date.now() - 1000 * 60 * 130,
+        timestampStr: '2h ago',
+        frequencyHz: 396
+      }
+    ];
+
+    const STREAM_TEMPLATES = [
+      {
+        text: 'Just shipped v1.0 of the indie project. Staring at the dashboard in complete disbelief.',
+        mood: 'Hype',
+        subVibe: 'Product Launch Adrenaline',
+        theme: 'cyber-neon',
+        energy: 94,
+        author: { name: 'Sofia Gomez', handle: 'sofia_ship', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=sofia', location: 'Buenos Aires' }
+      },
+      {
+        text: 'Listening to vintage Japanese jazz while soldering custom mechanical keyboards.',
+        mood: 'Chill',
+        subVibe: 'Vinyl Warmth',
+        theme: 'cosmic-void',
+        energy: 40,
+        author: { name: 'Lars Lindqvist', handle: 'lars_key', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=lars', location: 'Stockholm' }
+      },
+      {
+        text: 'Midnight motorcycle ride along Victoria Harbour with neon signs reflecting in the visor.',
+        mood: 'Party',
+        subVibe: 'Neon Skyline Club',
+        theme: 'tokyo-drift',
+        energy: 85,
+        author: { name: 'Wei Chen', handle: 'wei_rider', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=wei', location: 'Hong Kong' }
+      }
+    ];
+
+    // 2. STATE STORAGE
+    let currentUser = {
+      name: 'Alex Rivera',
+      handle: 'alex_frequency',
+      location: 'San Francisco, CA',
+      avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=alexrivera'
+    };
+
+    try {
+      const savedUser = localStorage.getItem('vibestream_user');
+      if (savedUser) currentUser = JSON.parse(savedUser);
+    } catch (e) {}
+
+    let userCreatedVibes = [];
+    try {
+      const savedCreated = localStorage.getItem('vibestream_created_vibes');
+      if (savedCreated) userCreatedVibes = JSON.parse(savedCreated);
+      else {
+        userCreatedVibes = [{
+          id: 'vibe-init-user',
+          text: 'Late-night coding sprint fueled by black coffee and lofi beats',
+          mood: 'Focus',
+          subVibe: 'Deep Terminal Flow',
+          theme: 'cyber-neon',
+          energy: 85,
+          author: { ...currentUser, isCurrentUser: true },
+          likes: 24,
+          isLiked: true,
+          matchedCount: 11,
+          createdAt: Date.now() - 1000 * 60 * 15,
+          timestampStr: '15m ago',
+          frequencyHz: 432
+        }];
+      }
+    } catch (e) {}
+
+    let savedVibes = [];
+    try {
+      const savedArchive = localStorage.getItem('vibestream_saved_vibes');
+      if (savedArchive) savedVibes = JSON.parse(savedArchive);
+    } catch (e) {}
+
+    let globalVibes = [...userCreatedVibes, ...INITIAL_VIBES];
+
+    // Form selection state
+    let selectedMood = 'Focus';
+    let selectedTheme = 'cyber-neon';
+    let currentEnergy = 85;
+    let currentTab = 'create';
+    let currentProfileTab = 'created';
+    let currentFeedFilter = 'All';
+    let currentSortMode = 'trending';
+    let isLiveStreamActive = true;
+    let currentMatchTarget = null;
+
+    // 3. WEB AUDIO SYNTHESIZER ENGINE
+    class SynthEngine {
+      constructor() {
+        this.ctx = null;
+        this.master = null;
+        this.analyser = null;
+        this.oscillators = [];
+        this.currentPlayingId = null;
+        this.interval = null;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContextClass();
+          this.master = this.ctx.createGain();
+          this.master.gain.setValueAtTime(0.28, this.ctx.currentTime);
+          this.analyser = this.ctx.createAnalyser();
+          this.analyser.fftSize = 128;
+          this.master.connect(this.analyser);
+          this.analyser.connect(this.ctx.destination);
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+      play(id, mood, energy) {
+        this.stop();
+        this.init();
+        this.currentPlayingId = id;
+        const t = this.ctx.currentTime;
+        const base = (MOOD_CONFIG[mood] || MOOD_CONFIG.Focus).baseFrequency;
+
+        if (mood === 'Focus') {
+          const osc1 = this.ctx.createOscillator();
+          const osc2 = this.ctx.createOscillator();
+          osc1.type = 'triangle';
+          osc1.frequency.setValueAtTime(base / 2, t);
+          osc2.type = 'sine';
+          osc2.frequency.setValueAtTime(base / 2 + 7.83, t);
+          osc1.connect(this.master);
+          osc2.connect(this.master);
+          osc1.start(t);
+          osc2.start(t);
+          this.oscillators.push(osc1, osc2);
+        } else if (mood === 'Chill') {
+          [base * 0.5, base * 0.625, base * 0.75].forEach(freq => {
+            const osc = this.ctx.createOscillator();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, t);
+            osc.connect(this.master);
+            osc.start(t);
+            this.oscillators.push(osc);
+          });
+        } else {
+          const notes = [base, base * 1.25, base * 1.5];
+          let idx = 0;
+          this.interval = setInterval(() => {
+            if (!this.ctx || !this.currentPlayingId) return;
+            const now = this.ctx.currentTime;
+            const osc = this.ctx.createOscillator();
+            const g = this.ctx.createGain();
+            osc.type = mood === 'Party' ? 'sawtooth' : 'sine';
+            osc.frequency.setValueAtTime(notes[idx % notes.length], now);
+            idx++;
+            g.gain.setValueAtTime(0.15, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+            osc.connect(g);
+            g.connect(this.master);
+            osc.start(now);
+            osc.stop(now + 0.22);
+          }, 140);
+        }
+      }
+      stop() {
+        this.currentPlayingId = null;
+        if (this.interval) clearInterval(this.interval);
+        this.oscillators.forEach(o => {
+          try { o.stop(); o.disconnect(); } catch (e) {}
+        });
+        this.oscillators = [];
+      }
+    }
+    const synth = new SynthEngine();
+
+    // 4. TOAST NOTIFICATIONS
+    function showToast(msg) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'pointer-events-auto flex items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-[#141428] border border-white/20 text-white text-xs font-medium shadow-2xl';
+      toast.innerHTML = `<span>${msg}</span><button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-white">✕</button>`;
+      container.appendChild(toast);
+      setTimeout(() => { toast.remove(); }, 3500);
+    }
+
+    // 5. CARD TEMPLATE GENERATOR
+    function createCardMarkup(vibe, isCompact = false) {
+      const theme = CARD_THEMES[vibe.theme] || CARD_THEMES['cyber-neon'];
+      const moodCfg = MOOD_CONFIG[vibe.mood] || MOOD_CONFIG.Focus;
+      const isSaved = savedVibes.some(s => s.id === vibe.id);
+
+      return `
+        <article id="card-${vibe.id}" class="group relative rounded-2xl bg-gradient-to-br ${theme.gradient} border border-white/10 p-5 md:p-6 transition-all duration-300 hover:border-white/20 hover:shadow-2xl overflow-hidden" style="box-shadow: 0 12px 40px -15px ${theme.glow}">
+          <!-- Glow aura -->
+          <div class="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full blur-3xl opacity-35" style="background-color: ${theme.accent}"></div>
+          <div class="pointer-events-none absolute -left-20 -bottom-20 h-64 w-64 rounded-full blur-3xl opacity-25" style="background-color: ${theme.secondary}"></div>
+
+          <!-- Header -->
+          <header class="relative z-10 flex items-start justify-between gap-4 pb-3 border-b border-white/10">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="relative h-11 w-11 shrink-0 rounded-xl bg-white/5 p-0.5 border border-white/10 overflow-hidden flex items-center justify-center" style="border-color: ${theme.accent}50">
+                <img src="${vibe.author.avatar}" alt="${vibe.author.name}" class="h-full w-full rounded-lg object-cover bg-slate-900">
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold text-slate-100 text-sm truncate">${vibe.author.name}</span>
+                  ${vibe.author.isCurrentUser ? '<span class="text-[10px] font-mono font-semibold text-fuchsia-400 px-1.5 py-0.5 bg-fuchsia-950/60 rounded border border-fuchsia-800/50">YOU</span>' : ''}
+                </div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 truncate">
+                  <span>@${vibe.author.handle}</span>
+                  <span>·</span>
+                  <span class="truncate">${vibe.author.location}</span>
+                  <span>·</span>
+                  <span>${vibe.timestampStr || 'Just now'}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button onclick="toggleCardAudio('${vibe.id}', '${vibe.mood}', ${vibe.energy})" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-mono border bg-white/5 text-slate-300 border-white/10 hover:bg-white/10 hover:text-white" id="audio-btn-${vibe.id}">
+                <i data-lucide="volume-2" class="h-3.5 w-3.5 text-slate-400"></i>
+                <span class="hidden sm:inline">Stream</span>
+              </button>
+              <button onclick="toggleSaveVibe('${vibe.id}')" class="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors" title="Bookmark card">
+                <i data-lucide="${isSaved ? 'bookmark-check' : 'bookmark'}" class="h-4 w-4 ${isSaved ? 'text-fuchsia-400' : ''}"></i>
+              </button>
+            </div>
+          </header>
+
+          <!-- Mood Banner -->
+          <div class="relative z-10 flex items-center justify-between text-xs mt-3 mb-2">
+            <div class="flex items-center gap-2">
+              <span class="font-bold tracking-wide flex items-center gap-1" style="color: ${moodCfg.color}">
+                <i data-lucide="radio" class="h-3.5 w-3.5"></i>
+                ${vibe.mood.toUpperCase()}
+              </span>
+              <span class="text-slate-600">/</span>
+              <span class="text-slate-300 italic truncate max-w-[200px]">${vibe.subVibe || moodCfg.subVibe}</span>
+            </div>
+            <div class="font-mono text-[11px] text-slate-400">
+              <span class="text-slate-200 font-semibold">${vibe.energy}%</span> Energy
+            </div>
+          </div>
+
+          <!-- Main Quote -->
+          <div class="relative z-10 my-4">
+            <p class="font-display text-lg md:text-xl font-medium tracking-tight text-white leading-relaxed">
+              &ldquo;${vibe.text}&rdquo;
+            </p>
+          </div>
+
+          <!-- Animated Audio Wave Canvas -->
+          <div class="relative z-10 my-3">
+            <div class="relative w-full overflow-hidden rounded-xl bg-black/30 border border-white/5 p-1.5">
+              <canvas id="canvas-${vibe.id}" class="w-full h-12 block"></canvas>
+            </div>
+          </div>
+
+          <!-- Footer Actions -->
+          <footer class="relative z-10 mt-4 pt-3 border-t border-white/10 flex items-center justify-between gap-2 flex-wrap">
+            <div class="flex items-center gap-2">
+              <button onclick="toggleCardLike('${vibe.id}')" class="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium border ${vibe.isLiked ? 'bg-rose-500/20 text-rose-300 border-rose-500/40' : 'bg-white/5 text-slate-300 border-white/10'} hover:bg-white/10 transition-all">
+                <i data-lucide="heart" class="h-4 w-4 ${vibe.isLiked ? 'fill-rose-500 text-rose-500' : 'text-slate-400'}"></i>
+                <span class="font-mono tabular-nums">${vibe.likes}</span>
+              </button>
+
+              <button onclick="openMatchModal('${vibe.id}')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-purple-500/15 text-purple-300 border border-purple-500/30 hover:bg-purple-500/25 transition-all">
+                <i data-lucide="zap" class="h-3.5 w-3.5 text-purple-400"></i>
+                <span>Match Vibe</span>
+                <span class="text-[11px] font-mono text-purple-400/80">(${vibe.matchedCount})</span>
+              </button>
+            </div>
+
+            <div class="flex items-center gap-1.5 ml-auto">
+              <button onclick="shareVibeCard('${vibe.id}')" class="p-2 rounded-lg text-slate-300 bg-white/5 border border-white/10 hover:bg-white/10 hover:text-white" title="Copy share link">
+                <i data-lucide="share-2" class="h-4 w-4"></i>
+              </button>
+              <button onclick="downloadCardImage('${vibe.id}')" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white" title="Export PNG Card for Instagram/Twitter">
+                <i data-lucide="download" class="h-3.5 w-3.5"></i>
+                <span class="hidden sm:inline">Export</span>
+              </button>
+            </div>
+          </footer>
+        </article>
+      `;
+    }
+
+    // 6. WAVE VISUALIZER ENGINE
+    const activeCanvases = new Set();
+    function startCanvasWave(vibeId, accent, secondary, energy) {
+      activeCanvases.add(vibeId);
+      const canvas = document.getElementById(`canvas-${vibeId}`);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      let phase = Math.random() * 10;
+      function loop() {
+        if (!activeCanvases.has(vibeId) || !document.getElementById(`canvas-${vibeId}`)) return;
+        const rect = canvas.getBoundingClientRect();
+        if (rect.width > 0 && (canvas.width !== rect.width || canvas.height !== rect.height)) {
+          canvas.width = rect.width;
+          canvas.height = rect.height;
+        }
+
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        const isPlaying = synth.currentPlayingId === vibeId;
+        phase += isPlaying ? 0.08 : 0.03;
+
+        // Equalizer Bars
+        const bars = 26;
+        const barW = w / bars;
+        for (let i = 0; i < bars; i++) {
+          const wave = (Math.sin(phase * 1.5 + i * 0.45) + Math.cos(phase * 0.8 + i * 0.3) + 2) / 4;
+          const barH = Math.max(4, wave * (h * 0.75) * (isPlaying ? 1 : (energy / 100)));
+          const x = i * barW + barW * 0.25;
+          const y = (h - barH) / 2;
+          ctx.fillStyle = accent;
+          ctx.globalAlpha = isPlaying ? 0.6 : 0.25;
+          ctx.fillRect(x, y, barW * 0.5, barH);
+        }
+
+        // Overlay harmonic line
+        ctx.globalAlpha = isPlaying ? 0.95 : 0.6;
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = accent;
+        ctx.beginPath();
+        for (let i = 0; i <= 30; i++) {
+          const x = (i / 30) * w;
+          const progress = i / 30;
+          const env = Math.sin(progress * Math.PI);
+          const y = (h / 2) + Math.sin(progress * 12 + phase * 2) * (h * 0.35 * env);
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
+    }
+
+    // 7. HIGH-RES PNG CARD EXPORT ENGINE
+    function downloadCardImage(vibeId) {
+      const vibe = globalVibes.find(v => v.id === vibeId) || userCreatedVibes.find(v => v.id === vibeId);
+      if (!vibe) return;
+
+      showToast('Rendering high-resolution Vibe Card...');
+      const theme = CARD_THEMES[vibe.theme] || CARD_THEMES['cyber-neon'];
+      const moodCfg = MOOD_CONFIG[vibe.mood] || MOOD_CONFIG.Focus;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = 1080;
+      canvas.height = 1350;
+      const ctx = canvas.getContext('2d');
+
+      // Background gradient
+      const grad = ctx.createLinearGradient(0, 0, 1080, 1350);
+      grad.addColorStop(0, '#060714');
+      grad.addColorStop(0.5, '#110a26');
+      grad.addColorStop(1, '#031422');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 1080, 1350);
+
+      // Glow orbs
+      const drawGlow = (x, y, r, color) => {
+        const rad = ctx.createRadialGradient(x, y, 0, x, y, r);
+        rad.addColorStop(0, color);
+        rad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = rad;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+      };
+      drawGlow(900, 200, 450, theme.glow);
+      drawGlow(200, 1100, 500, 'rgba(168, 85, 247, 0.25)');
+
+      // Card frame
+      ctx.beginPath();
+      ctx.roundRect(64, 64, 952, 1222, 40);
+      ctx.fillStyle = 'rgba(18, 18, 32, 0.7)';
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.stroke();
+
+      // Header
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 36px Outfit, sans-serif';
+      ctx.fillText('VIBESTREAM', 114, 144);
+      ctx.fillStyle = theme.accent;
+      ctx.font = '600 24px "JetBrains Mono", monospace';
+      ctx.textAlign = 'right';
+      ctx.fillText(`${vibe.frequencyHz || moodCfg.baseFrequency} Hz · ${vibe.energy}% Energy`, 966, 144);
+      ctx.textAlign = 'left';
+
+      // Mood tag
+      ctx.fillStyle = moodCfg.color;
+      ctx.font = 'bold 28px Outfit, sans-serif';
+      ctx.fillText(`MOOD: ${vibe.mood.toUpperCase()}`, 114, 230);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.font = '24px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText(`// ${vibe.subVibe || 'Resonance'}`, 330, 230);
+
+      // Text Quote
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 46px Outfit, sans-serif';
+      const words = vibe.text.split(' ');
+      let line = '';
+      let lineY = 360;
+      for (let n = 0; n < words.length; n++) {
+        const test = line + words[n] + ' ';
+        if (ctx.measureText(test).width > 850 && n > 0) {
+          ctx.fillText(line, 114, lineY);
+          line = words[n] + ' ';
+          lineY += 64;
+        } else {
+          line = test;
+        }
+      }
+      ctx.fillText(line, 114, lineY);
+
+      // Waveform
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = theme.accent;
+      ctx.beginPath();
+      for (let i = 0; i <= 60; i++) {
+        const x = 114 + (i / 60) * 852;
+        const norm = i / 60;
+        const y = 880 + Math.sin(norm * 14) * (90 * Math.sin(norm * Math.PI));
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Author footer
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 32px Outfit, sans-serif';
+      ctx.fillText(vibe.author.name, 114, 1180);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.font = '22px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText(`@${vibe.author.handle} · ${vibe.author.location}`, 114, 1220);
+
+      const link = document.createElement('a');
+      link.download = `vibestream-${vibe.mood.toLowerCase()}-${vibe.id}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showToast('Vibe Card downloaded! Ready for Instagram & Twitter.');
+    }
+
+    // 8. FORM CONTROLS & LIVE PREVIEW
+    function renderMoodButtons() {
+      const container = document.getElementById('mood-buttons-container');
+      container.innerHTML = Object.keys(MOOD_CONFIG).map(m => {
+        const cfg = MOOD_CONFIG[m];
+        const isSel = selectedMood === m;
+        return `
+          <button
+            type="button"
+            onclick="handleSelectMood('${m}')"
+            class="flex flex-col items-center justify-center p-3 rounded-xl border text-xs font-medium transition-all ${isSel ? 'bg-slate-800 text-white shadow-lg' : 'bg-slate-900/60 text-slate-400 border-white/10 hover:text-white'}"
+            style="${isSel ? `border-color: ${cfg.color}; box-shadow: 0 0 16px -2px ${cfg.color}40` : ''}"
+          >
+            <i data-lucide="${cfg.icon}" class="h-4 w-4 mb-1" style="${isSel ? `color: ${cfg.color}` : ''}"></i>
+            <span class="font-semibold">${m}</span>
+          </button>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function renderThemeButtons() {
+      const container = document.getElementById('theme-buttons-container');
+      container.innerHTML = Object.keys(CARD_THEMES).map(tId => {
+        const t = CARD_THEMES[tId];
+        const isSel = selectedTheme === tId;
+        return `
+          <button
+            type="button"
+            onclick="handleSelectTheme('${tId}')"
+            class="flex items-center gap-2 p-2 rounded-xl text-xs font-medium border transition-all ${isSel ? 'border-white bg-white/10 text-white' : 'border-white/10 bg-black/40 text-slate-400 hover:text-white'}"
+          >
+            <span class="h-4 w-4 rounded-full shrink-0 border border-white/20" style="background: linear-gradient(135deg, ${t.accent}, ${t.secondary})"></span>
+            <span class="truncate">${t.name}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function handleSelectMood(m) {
+      selectedMood = m;
+      selectedTheme = MOOD_CONFIG[m].defaultTheme;
+      document.getElementById('mood-freq-display').innerText = `${MOOD_CONFIG[m].baseFrequency} Hz Resonance`;
+      renderMoodButtons();
+      renderThemeButtons();
+      updatePreview();
+    }
+
+    function handleSelectTheme(tId) {
+      selectedTheme = tId;
+      renderThemeButtons();
+      updatePreview();
+    }
+
+    function handleEnergyChange(val) {
+      currentEnergy = Number(val);
+      document.getElementById('energy-val-display').innerText = `${val}%`;
+      updatePreview();
+    }
+
+    function updatePreview() {
+      const textVal = document.getElementById('create-text').value;
+      document.getElementById('char-counter').innerText = `${textVal.length}/180`;
+
+      const previewVibe = {
+        id: 'preview',
+        text: textVal.trim() || 'Your raw vibe frequency will appear here in real time...',
+        mood: selectedMood,
+        subVibe: MOOD_CONFIG[selectedMood].subVibe,
+        theme: selectedTheme,
+        energy: currentEnergy,
+        author: { ...currentUser, isCurrentUser: true },
+        likes: 1,
+        isLiked: false,
+        matchedCount: 0,
+        timestampStr: 'Live Preview',
+        frequencyHz: MOOD_CONFIG[selectedMood].baseFrequency
+      };
+
+      document.getElementById('live-preview-card-slot').innerHTML = createCardMarkup(previewVibe);
+      lucide.createIcons();
+      const theme = CARD_THEMES[selectedTheme];
+      startCanvasWave('preview', theme.accent, theme.secondary, currentEnergy);
+    }
+
+    function setPromptText(txt, mood) {
+      document.getElementById('create-text').value = txt;
+      handleSelectMood(mood);
+      showToast(`Spark applied: ${mood}`);
+    }
+
+    function shufflePrompt() {
+      const prompts = [
+        { text: 'Late-night coding sprint with atmospheric synth drone', mood: 'Focus' },
+        { text: 'Chilling on the balcony with steaming cardamom chai as rain falls', mood: 'Chill' },
+        { text: 'Crushed a heavy squat PR to synthwave, zero excuses', mood: 'Hype' },
+        { text: 'Secret rooftop set overlooking the neon skyline with heavy bass', mood: 'Party' },
+        { text: 'Walking through empty rain-soaked streets under amber streetlights', mood: 'Melancholy' }
+      ];
+      const p = prompts[Math.floor(Math.random() * prompts.length)];
+      setPromptText(p.text, p.mood);
+    }
+
+    // 9. SUBMIT & BROADCAST
+    function handlePublishVibe(e) {
+      e.preventDefault();
+      const txt = document.getElementById('create-text').value.trim();
+      if (!txt) {
+        showToast('Please type what you are feeling!');
+        return;
+      }
+
+      const newVibe = {
+        id: `vibe-${Date.now()}`,
+        text: txt,
+        mood: selectedMood,
+        subVibe: MOOD_CONFIG[selectedMood].subVibe,
+        theme: selectedTheme,
+        energy: currentEnergy,
+        author: { ...currentUser, isCurrentUser: true },
+        likes: 1,
+        isLiked: true,
+        matchedCount: Math.floor(Math.random() * 6) + 2,
+        createdAt: Date.now(),
+        timestampStr: 'Just now',
+        frequencyHz: MOOD_CONFIG[selectedMood].baseFrequency
+      };
+
+      userCreatedVibes.unshift(newVibe);
+      globalVibes.unshift(newVibe);
+
+      try {
+        localStorage.setItem('vibestream_created_vibes', JSON.stringify(userCreatedVibes));
+      } catch (err) {}
+
+      showToast('✨ Vibe Card broadcasted to the global feed!');
+      switchTab('feed');
+    }
+
+    // 10. COMMUNITY FEED ENGINE
+    function renderFeedFilterStrip() {
+      const strip = document.getElementById('feed-mood-filter-strip');
+      const moods = ['All', 'Focus', 'Chill', 'Hype', 'Party', 'Melancholy'];
+
+      strip.innerHTML = moods.map(m => {
+        const isSel = currentFeedFilter === m;
+        const count = m === 'All' ? globalVibes.length : globalVibes.filter(v => v.mood === m).length;
+        return `
+          <button
+            onclick="setFeedFilter('${m}')"
+            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap shrink-0 transition-all border ${isSel ? 'bg-white text-slate-950 border-white shadow-md' : 'bg-slate-900/60 text-slate-400 border-white/10 hover:text-white'}"
+          >
+            <span>${m === 'All' ? 'All Waves' : m}</span>
+            <span class="text-[10px] opacity-75 font-mono">(${count})</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function setFeedFilter(m) {
+      currentFeedFilter = m;
+      renderFeedFilterStrip();
+      renderFeed();
+    }
+
+    function setSortMode(mode) {
+      currentSortMode = mode;
+      ['trending', 'latest', 'energy'].forEach(s => {
+        const btn = document.getElementById(`sort-${s}`);
+        if (s === mode) {
+          btn.className = `flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${s === 'trending' ? 'bg-fuchsia-600' : s === 'latest' ? 'bg-cyan-600' : 'bg-amber-600'} text-white`;
+        } else {
+          btn.className = 'flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors text-slate-400 hover:text-white';
+        }
+      });
+      renderFeed();
+    }
+
+    function renderFeed() {
+      const search = (document.getElementById('feed-search-input').value || '').toLowerCase();
+      let list = globalVibes.filter(v => {
+        if (currentFeedFilter !== 'All' && v.mood !== currentFeedFilter) return false;
+        if (search) {
+          return v.text.toLowerCase().includes(search) ||
+                 v.author.name.toLowerCase().includes(search) ||
+                 v.author.location.toLowerCase().includes(search);
+        }
+        return true;
+      });
+
+      if (currentSortMode === 'latest') list.sort((a, b) => b.createdAt - a.createdAt);
+      else if (currentSortMode === 'trending') list.sort((a, b) => (b.likes + b.matchedCount * 2) - (a.likes + a.matchedCount * 2));
+      else if (currentSortMode === 'energy') list.sort((a, b) => b.energy - a.energy);
+
+      document.getElementById('feed-count-tag').innerText = `${list.length} Active Waves`;
+      const grid = document.getElementById('feed-grid');
+      grid.innerHTML = list.map(v => createCardMarkup(v)).join('');
+      lucide.createIcons();
+
+      list.forEach(v => {
+        const t = CARD_THEMES[v.theme] || CARD_THEMES['cyber-neon'];
+        startCanvasWave(v.id, t.accent, t.secondary, v.energy);
+      });
+    }
+
+    function toggleCardLike(id) {
+      const update = v => {
+        if (v.id === id) {
+          v.isLiked = !v.isLiked;
+          v.likes = v.isLiked ? v.likes + 1 : Math.max(0, v.likes - 1);
+        }
+      };
+      globalVibes.forEach(update);
+      userCreatedVibes.forEach(update);
+      savedVibes.forEach(update);
+      renderFeed();
+      renderProfileCards();
+    }
+
+    function toggleSaveVibe(id) {
+      const vibe = globalVibes.find(v => v.id === id);
+      if (!vibe) return;
+      const idx = savedVibes.findIndex(s => s.id === id);
+      if (idx >= 0) {
+        savedVibes.splice(idx, 1);
+        showToast('Removed from saved library');
+      } else {
+        savedVibes.unshift(vibe);
+        showToast('Saved to your personal library!');
+      }
+      try {
+        localStorage.setItem('vibestream_saved_vibes', JSON.stringify(savedVibes));
+      } catch (e) {}
+      renderFeed();
+      renderProfileStats();
+    }
+
+    function shareVibeCard(id) {
+      const v = globalVibes.find(x => x.id === id);
+      const shareUrl = `${window.location.origin}${window.location.pathname}#vibe-${id}`;
+      const text = `Check out this vibe on VibeStream: "${v ? v.text : ''}"\n${shareUrl}`;
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text);
+        showToast('Vibe link copied to clipboard!');
+      } else {
+        showToast('Sharing link generated!');
+      }
+    }
+
+    function toggleCardAudio(id, mood, energy) {
+      if (synth.currentPlayingId === id) {
+        synth.stop();
+        showToast('Audio paused');
+      } else {
+        synth.play(id, mood, energy);
+        showToast(`Streaming ${mood} ambient soundscape...`);
+      }
+    }
+
+    // 11. MATCH VIBE MODAL
+    function openMatchModal(id) {
+      const vibe = globalVibes.find(v => v.id === id);
+      if (!vibe) return;
+      currentMatchTarget = vibe;
+
+      const userEnergy = userCreatedVibes[0] ? userCreatedVibes[0].energy : 80;
+      const diff = Math.abs(vibe.energy - userEnergy);
+      const score = Math.max(78, Math.min(99, 100 - diff + Math.floor(Math.random() * 6)));
+
+      document.getElementById('match-modal-subtitle').innerText = `Harmonic connection with @${vibe.author.handle} in ${vibe.author.location}`;
+      document.getElementById('match-modal-score').innerText = `${score}%`;
+      document.getElementById('match-modal-mood').innerText = vibe.mood;
+      document.getElementById('match-modal-freq').innerText = `${vibe.frequencyHz || 432} Hz`;
+      document.getElementById('match-modal-quote').innerText = `“${vibe.text}”`;
+
+      document.getElementById('match-modal').classList.remove('hidden');
+    }
+
+    function closeMatchModal() {
+      document.getElementById('match-modal').classList.add('hidden');
+      currentMatchTarget = null;
+    }
+
+    function sendWaveAction() {
+      if (!currentMatchTarget) return;
+      currentMatchTarget.matchedCount += 1;
+      showToast(`Frequency wave sent to @${currentMatchTarget.author.handle}!`);
+      closeMatchModal();
+      renderFeed();
+      renderProfileStats();
+    }
+
+    // 12. LIVE STREAM SIMULATOR
+    let streamTimer = null;
+    let streamIndex = 0;
+    function injectSimulatedVibe() {
+      const t = STREAM_TEMPLATES[streamIndex % STREAM_TEMPLATES.length];
+      streamIndex++;
+      const newVibe = {
+        ...t,
+        id: `stream-${Date.now()}`,
+        createdAt: Date.now(),
+        timestampStr: 'Just now',
+        likes: Math.floor(Math.random() * 30) + 15,
+        matchedCount: Math.floor(Math.random() * 12) + 3,
+        frequencyHz: (MOOD_CONFIG[t.mood] || MOOD_CONFIG.Focus).baseFrequency
+      };
+      globalVibes.unshift(newVibe);
+      showToast(`Live wave received from ${t.author.location}: "${t.mood}"`);
+      renderFeedFilterStrip();
+      renderFeed();
+    }
+
+    function toggleLiveStream() {
+      isLiveStreamActive = !isLiveStreamActive;
+      const btn = document.getElementById('live-stream-btn');
+      const text = document.getElementById('live-stream-status-text');
+      if (isLiveStreamActive) {
+        btn.className = 'flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium border bg-emerald-500/15 border-emerald-500/40 text-emerald-300';
+        text.innerText = 'Live Sync: Active';
+        showToast('Live frequency sync activated');
+      } else {
+        btn.className = 'flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium border bg-white/5 border-white/10 text-slate-400';
+        text.innerText = 'Live Sync: Paused';
+        showToast('Live frequency sync paused');
+      }
+    }
+
+    setInterval(() => {
+      if (isLiveStreamActive) injectSimulatedVibe();
+    }, 32000);
+
+    // 13. USER PROFILE MANAGEMENT
+    function toggleEditProfile() {
+      const drawer = document.getElementById('profile-edit-drawer');
+      const isHidden = drawer.classList.contains('hidden');
+      if (isHidden) {
+        document.getElementById('edit-name-input').value = currentUser.name;
+        document.getElementById('edit-handle-input').value = currentUser.handle;
+        document.getElementById('edit-location-input').value = currentUser.location;
+        drawer.classList.remove('hidden');
+      } else {
+        drawer.classList.add('hidden');
+      }
+    }
+
+    function saveProfileChanges(e) {
+      e.preventDefault();
+      currentUser.name = document.getElementById('edit-name-input').value.trim() || 'Alex Rivera';
+      currentUser.handle = document.getElementById('edit-handle-input').value.trim() || 'alex_frequency';
+      currentUser.location = document.getElementById('edit-location-input').value.trim() || 'Cyberspace';
+      currentUser.avatar = `https://api.dicebear.com/7.x/bottts/svg?seed=${currentUser.handle}`;
+
+      try {
+        localStorage.setItem('vibestream_user', JSON.stringify(currentUser));
+      } catch (err) {}
+
+      document.getElementById('user-name-display').innerText = currentUser.name;
+      document.getElementById('user-handle-display').innerText = `@${currentUser.handle}`;
+      document.getElementById('user-location-display').innerText = currentUser.location;
+      document.getElementById('user-avatar-img').src = currentUser.avatar;
+
+      document.getElementById('profile-edit-drawer').classList.add('hidden');
+      showToast('Profile frequency signature saved!');
+      updatePreview();
+    }
+
+    function setProfileTab(tab) {
+      currentProfileTab = tab;
+      const btnCreated = document.getElementById('tab-btn-created');
+      const btnSaved = document.getElementById('tab-btn-saved');
+
+      if (tab === 'created') {
+        btnCreated.className = 'px-4 py-1.5 text-xs font-semibold rounded-lg transition-colors bg-fuchsia-600 text-white';
+        btnSaved.className = 'px-4 py-1.5 text-xs font-semibold rounded-lg transition-colors text-slate-400 hover:text-white';
+      } else {
+        btnCreated.className = 'px-4 py-1.5 text-xs font-semibold rounded-lg transition-colors text-slate-400 hover:text-white';
+        btnSaved.className = 'px-4 py-1.5 text-xs font-semibold rounded-lg transition-colors bg-cyan-600 text-white';
+      }
+      renderProfileCards();
+    }
+
+    function renderProfileStats() {
+      const likes = userCreatedVibes.reduce((acc, v) => acc + (v.likes || 0), 0);
+      const matches = userCreatedVibes.reduce((acc, v) => acc + (v.matchedCount || 0), 0);
+      const score = userCreatedVibes.length * 45 + likes * 2 + matches * 3;
+
+      document.getElementById('stat-created-count').innerText = userCreatedVibes.length;
+      document.getElementById('stat-likes-count').innerText = likes;
+      document.getElementById('stat-matches-count').innerText = matches;
+      document.getElementById('stat-freq-score').innerText = score;
+
+      document.getElementById('profile-created-badge').innerText = userCreatedVibes.length;
+      document.getElementById('profile-saved-badge').innerText = savedVibes.length;
+    }
+
+    function renderProfileCards() {
+      renderProfileStats();
+      const list = currentProfileTab === 'created' ? userCreatedVibes : savedVibes;
+      const grid = document.getElementById('profile-cards-grid');
+
+      if (list.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-16 px-4 rounded-3xl bg-slate-900/30 border border-white/5 space-y-3">
+            <i data-lucide="sparkles" class="h-10 w-10 text-fuchsia-400 mx-auto animate-pulse"></i>
+            <h3 class="text-lg font-bold text-slate-200">${currentProfileTab === 'created' ? 'No vibes created yet' : 'Saved archive is empty'}</h3>
+            <p class="text-xs text-slate-400 max-w-sm mx-auto">
+              ${currentProfileTab === 'created' ? 'Broadcast your state of mind to get started!' : 'Bookmark interesting waves from the Global Feed.'}
+            </p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      grid.innerHTML = list.map(v => createCardMarkup(v)).join('');
+      lucide.createIcons();
+      list.forEach(v => {
+        const t = CARD_THEMES[v.theme] || CARD_THEMES['cyber-neon'];
+        startCanvasWave(v.id, t.accent, t.secondary, v.energy);
+      });
+    }
+
+    // 14. TAB SWITCHING
+    function switchTab(tab) {
+      currentTab = tab;
+      ['create', 'feed', 'profile'].forEach(t => {
+        const sec = document.getElementById(`tab-${t}`);
+        const navDesktop = document.getElementById(`nav-btn-${t}`);
+        const navMobile = document.getElementById(`mob-nav-${t}`);
+
+        if (t === tab) {
+          sec.classList.remove('hidden');
+          navDesktop.className = `transition-colors hover:text-white ${t === 'create' ? 'text-cyan-300' : t === 'feed' ? 'text-fuchsia-300' : 'text-purple-300'} font-semibold whitespace-nowrap`;
+          navMobile.className = `flex flex-col items-center justify-center py-1.5 ${t === 'create' ? 'text-cyan-400' : t === 'feed' ? 'text-fuchsia-400' : 'text-purple-400'} font-bold`;
+        } else {
+          sec.classList.add('hidden');
+          navDesktop.className = 'transition-colors hover:text-white text-slate-300 whitespace-nowrap';
+          navMobile.className = 'flex flex-col items-center justify-center py-1.5 text-slate-400';
+        }
+      });
+
+      if (tab === 'feed') {
+        renderFeedFilterStrip();
+        renderFeed();
+      } else if (tab === 'profile') {
+        renderProfileCards();
+      } else if (tab === 'create') {
+        updatePreview();
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // INITIALIZATION
+    window.addEventListener('DOMContentLoaded', () => {
+      renderMoodButtons();
+      renderThemeButtons();
+      updatePreview();
+      renderFeedFilterStrip();
+      renderProfileStats();
+    });
+  </script>
+</body>
+</html>
